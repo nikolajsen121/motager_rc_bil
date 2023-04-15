@@ -1,41 +1,37 @@
-radio.onReceivedString(function (receivedString) {
-	
-})
 radio.onReceivedValue(function (name, value) {
-	
+    if (name.compare("mgy") == 0) {
+        backward = value
+    }
+    if (name.compare("mgx") == 0) {
+        right = value
+    }
+    right_motor = -1 * backward - right
+    left_motor = -1 * backward + right
 })
-bitbot.bbEnableBluetooth(BBBluetooth.btEnable)
+let left_motor = 0
+let right_motor = 0
+let right = 0
+let backward = 0
+bitbot.ledRainbow()
 radio.setGroup(1)
-radio.setFrequencyBand(0)
+basic.showIcon(IconNames.House)
 basic.forever(function () {
-    if (radio.receivedPacket(RadioPacketProperty.SignalStrength) >= 7) {
-        for (let index = 0; index < 1; index++) {
-            bitbot.setPixelColor(0, 0x00FF00)
-            bitbot.setPixelColor(1, 0x00FF00)
-            bitbot.setPixelColor(2, 0x00FF00)
-            bitbot.setPixelColor(3, 0x00FF00)
-            bitbot.setPixelColor(4, 0x00FF00)
-            bitbot.setPixelColor(5, 0x00FF00)
-        }
-    } else if (radio.receivedPacket(RadioPacketProperty.SignalStrength) >= 6) {
-        for (let index = 0; index < 1; index++) {
-            bitbot.setPixelColor(0, 0x00FF00)
-            bitbot.setPixelColor(1, 0x00FF00)
-            bitbot.setPixelColor(2, 0x00FF00)
-            bitbot.setPixelColor(3, 0x00FF00)
-            bitbot.setPixelColor(4, 0x00FF00)
-            bitbot.setPixelColor(5, 0xFF8000)
-        }
-    } else if (radio.receivedPacket(RadioPacketProperty.SignalStrength) < 6) {
-        for (let index = 0; index < 1; index++) {
-            bitbot.setPixelColor(0, 0x00FF00)
-            bitbot.setPixelColor(1, 0x00FF00)
-            bitbot.setPixelColor(2, 0x00FF00)
-            bitbot.setPixelColor(3, 0x00FF00)
-            bitbot.setPixelColor(4, 0xFF8000)
-            bitbot.setPixelColor(5, 0xFF0000)
-        }
-    } else {
-    	
+    if (left_motor > 0) {
+        bitbot.move(BBMotor.Left, BBDirection.Forward, pins.map(
+        left_motor,
+        40,
+        1023,
+        0,
+        100
+        ))
+    }
+    if (right_motor < 0) {
+        bitbot.move(BBMotor.Right, BBDirection.Forward, pins.map(
+        right_motor,
+        -40,
+        -1023,
+        0,
+        100
+        ))
     }
 })
